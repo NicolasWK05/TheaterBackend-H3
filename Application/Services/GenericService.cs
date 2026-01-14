@@ -1,7 +1,8 @@
 namespace TheaterBackend.Application.Services;
 
+using TheaterBackend.Application.Interfaces;
 using TheaterBackend.Domain.Interfaces;
-public abstract class GenericService<T>
+public abstract class GenericService<T> : IGenericService<T>
     where T : class
 {
     protected readonly IGenericRepo<T> Repo;

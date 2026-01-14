@@ -1,4 +1,3 @@
-
 namespace TheaterBackend.Domain.Models;
 
 public class Person
