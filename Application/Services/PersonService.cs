@@ -23,10 +23,7 @@ public class PersonService(IPersonRepo repo) : GenericService<Person>(repo), IPe
 
     public async Task<PersonDTO> GetByIdAsync(int id)
     {
-        var personEntity = await Repo.GetByIdAsync(id);
-        if (personEntity == null)
-            throw new Exception("Person not found");
-
+        var personEntity = await Repo.GetByIdAsync(id) ?? throw new Exception("Person not found");
         var personDTO = new PersonDTO
         {
             Id = personEntity.Id,

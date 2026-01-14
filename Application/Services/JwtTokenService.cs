@@ -1,6 +1,6 @@
 using TheaterBackend.Application.Interfaces;
 
-namespace TheaterBackend.Infrastructure.Auth;
+namespace TheaterBackend.Application.Services;
 
 public class JwtTokenService : IJwtTokenService
 {

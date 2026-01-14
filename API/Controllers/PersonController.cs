@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TheaterBackend.Application.DTOs;
 using TheaterBackend.Application.Services;
 using TheaterBackend.Domain.Models;
 
@@ -15,7 +16,6 @@ public class PersonController : ControllerBase
         _personService = personService;
     }
 
-    // GET api/person
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -23,7 +23,6 @@ public class PersonController : ControllerBase
         return Ok(persons);
     }
 
-    // GET api/person/{id}
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -35,15 +34,13 @@ public class PersonController : ControllerBase
         return Ok(person);
     }
 
-    // POST api/person
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Person person)
+    public async Task<IActionResult> Create([FromBody] PersonCreateDTO person)
     {
         await _personService.CreateAsync(person);
-        return CreatedAtAction(nameof(GetById), new { id = person.Id }, person);
+        return CreatedAtAction(nameof(GetById), person);
     }
 
-    // PUT api/person/{id}
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] Person person)
     {
@@ -54,7 +51,6 @@ public class PersonController : ControllerBase
         return NoContent();
     }
 
-    // DELETE api/person/{id}
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
