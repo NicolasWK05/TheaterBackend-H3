@@ -20,7 +20,28 @@ public class ScreenController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var screens = _screenService.GetAllAsync();
+        var screens = await _screenService.GetAllAsync();
         return Ok(screens);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromBody] int id)
+    {
+        await _screenService.DeleteAsync(id);
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] Screen screen)
+    {
+        await _screenService.CreateAsync(screen);
+        return Ok();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] Screen screen)
+    {
+        await _screenService.UpdateAsync(screen);
+        return Ok();
     }
 }
