@@ -1,0 +1,8 @@
+namespace TheaterBackend.Application.DTOs;
+
+public class PersonDTO
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set;}
+}

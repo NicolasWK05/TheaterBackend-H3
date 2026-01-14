@@ -1,4 +1,4 @@
-using TheaterBackend.Domain;
+using TheaterBackend.Domain.Models;
 using TheaterBackend.Domain.Interfaces;
 
 namespace TheaterBackend.Infrastructure.Repositories;
