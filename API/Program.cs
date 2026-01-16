@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TheaterBackend.Application.Interfaces;
 using TheaterBackend.Application.Services;
 using TheaterBackend.Domain.Interfaces;
 using TheaterBackend.Infrastructure;
@@ -35,6 +36,22 @@ builder.Services.AddScoped<ShowcaseService>();
 builder.Services.AddScoped<TheaterService>();
 builder.Services.AddScoped<TicketService>();
 
+builder.Services.AddScoped<IJwtTokenService>(_ =>
+    new JwtTokenService(
+        builder.Configuration["Jwt:Secret"]!,
+        builder.Configuration["Jwt:Issuer"]!,
+        builder.Configuration["Jwt:Audience"]!
+    ));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
@@ -43,6 +60,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 app.MapControllers();

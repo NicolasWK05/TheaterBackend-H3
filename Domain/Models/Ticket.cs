@@ -4,9 +4,15 @@ public class Ticket
 {
     public int Id { get; set; }
     public decimal Price { get; set; }
-    public Screening Screening { get; set; }
+
+    // Foreign keys
+    public int ScreeningId { get; set; }
     public int PersonId { get; set; }
-    public Person Person { get; set; }
-    public int SeatColumn { get; set; }
+
+    // Navigation
+    public Screening Screening { get; set; } = null!;
+    public Person Person { get; set; } = null!;
+
     public int SeatRow { get; set; }
+    public int SeatColumn { get; set; }
 }

@@ -20,7 +20,11 @@ namespace TheaterBackend.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Screen>()
+                .HasOne(s => s.Theater)
+                .WithMany(t => t.Screens)
+                .HasForeignKey(s => s.TheaterId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Person> Persons => Set<Person>();

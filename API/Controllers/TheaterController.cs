@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using TheaterBackend.Application.DTOs;
 using TheaterBackend.Application.Services;
-using TheaterBackend.Domain.Models;
 
 namespace TheaterBackend.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/theaters")]
 public class TheaterController : ControllerBase
 {
     private readonly TheaterService _theaterService;
@@ -16,45 +15,57 @@ public class TheaterController : ControllerBase
         _theaterService = theaterService;
     }
 
+    // GET /api/theaters
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<IEnumerable<TheaterReadDTO>>> GetAll()
     {
         var theaters = await _theaterService.GetAllAsync();
         return Ok(theaters);
     }
 
+    // GET /api/theaters/{id}
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<TheaterReadDTO>> GetById(int id)
     {
         var theater = await _theaterService.GetByIdAsync(id);
-
-        if (theater == null)
+        if (theater is null)
             return NotFound();
 
         return Ok(theater);
     }
 
+    // POST /api/theaters
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Theater theater)
+    public async Task<ActionResult<TheaterReadDTO>> Create(TheaterCreateDTO dto)
     {
-        await _theaterService.CreateAsync(theater);
-        return CreatedAtAction(nameof(GetById), theater.Id);
+        var created = await _theaterService.CreateAsync(dto);
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = created.Id },
+            created
+        );
     }
 
+    // PUT /api/theaters/{id}
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] Theater theater)
+    public async Task<IActionResult> Update(int id, TheaterUpdateDTO dto)
     {
-        if (id != theater.Id)
-            return BadRequest("ID mismatch");
+        var updated = await _theaterService.UpdateAsync(id, dto);
+        if (!updated)
+            return NotFound();
 
-        await _theaterService.UpdateAsync(theater);
         return NoContent();
     }
 
+    // DELETE /api/theaters/{id}
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _theaterService.DeleteAsync(id);
+        var deleted = await _theaterService.DeleteAsync(id);
+        if (!deleted)
+            return NotFound();
+
         return NoContent();
     }
 }

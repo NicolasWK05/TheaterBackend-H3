@@ -18,12 +18,12 @@ public class PersonService(IPersonRepo repo) : GenericService<Person>(repo), IPe
             PasswordHash = hashedPassword,
             PhoneNumber = person.PhoneNumber
         };
-        await Repo.AddAsync(personEntity);
+        await repo.AddAsync(personEntity);
     }
 
     public async Task<PersonDTO> GetByIdAsync(int id)
     {
-        var personEntity = await Repo.GetByIdAsync(id) ?? throw new Exception("Person not found");
+        var personEntity = await repo.GetByIdAsync(id) ?? throw new Exception("Person not found");
         var personDTO = new PersonDTO
         {
             Id = personEntity.Id,
@@ -37,7 +37,7 @@ public class PersonService(IPersonRepo repo) : GenericService<Person>(repo), IPe
 
     public async Task UpdateAsync(PersonUpdateDTO person)
     {
-        var personEntity = await Repo.GetByIdAsync(person.Id);
+        var personEntity = await repo.GetByIdAsync(person.Id);
         if (personEntity == null)
             throw new Exception("Person not found");
 
@@ -45,12 +45,12 @@ public class PersonService(IPersonRepo repo) : GenericService<Person>(repo), IPe
         personEntity.Name = person.Name;
         personEntity.PhoneNumber = person.PhoneNumber;
 
-        await Repo.UpdateAsync(personEntity);
+        await repo.UpdateAsync(personEntity);
     }
 
     public async Task ChangePasswordAsync(PersonChangePasswordDTO person)
     {
-        var personEntity = await Repo.GetByIdAsync(person.Id);
+        var personEntity = await repo.GetByIdAsync(person.Id);
         if (personEntity == null)
             throw new Exception("Person not found");
 
@@ -59,6 +59,21 @@ public class PersonService(IPersonRepo repo) : GenericService<Person>(repo), IPe
 
         personEntity.PasswordHash = hashedPassword;
 
-        await Repo.UpdateAsync(personEntity);
+        await repo.UpdateAsync(personEntity);
+    }
+
+    public async Task<PersonDTO> GetByEmailAsync(string email)
+    {
+        var personEntity = await repo.GetByEmailAsync(email) ?? throw new Exception("Person not found");
+        var personDTO = new PersonDTO
+        {
+            Id = personEntity.Id,
+            Email = personEntity.Email,
+            Name = personEntity.Name,
+            PhoneNumber = personEntity.PhoneNumber,
+            PasswordHash = personEntity.PasswordHash
+        };
+
+        return personDTO;
     }
 }

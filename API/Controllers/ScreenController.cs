@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using TheaterBackend.Application.DTOs;
 using TheaterBackend.Application.Services;
-using TheaterBackend.Domain.Models;
-using TheaterBackend.Infrastructure.Repositories;
 
 namespace TheaterBackend.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/screens")]
 public class ScreenController : ControllerBase
 {
     private readonly ScreenService _screenService;
@@ -17,31 +15,57 @@ public class ScreenController : ControllerBase
         _screenService = screenService;
     }
 
+    // GET /api/screens
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<IEnumerable<ScreenReadDTO>>> GetAll()
     {
         var screens = await _screenService.GetAllAsync();
         return Ok(screens);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] int id)
+    // GET /api/screens/{id}
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<ScreenReadDTO>> GetById(int id)
     {
-        await _screenService.DeleteAsync(id);
-        return Ok();
+        var screen = await _screenService.GetByIdAsync(id);
+        if (screen is null)
+            return NotFound();
+
+        return Ok(screen);
     }
 
+    // POST /api/screens
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Screen screen)
+    public async Task<ActionResult<ScreenReadDTO>> Create(ScreenCreateDTO dto)
     {
-        await _screenService.CreateAsync(screen);
-        return Ok();
+        var created = await _screenService.CreateAsync(dto);
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = created.Id },
+            created
+        );
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] Screen screen)
+    // PUT /api/screens/{id}
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, ScreenUpdateDTO dto)
     {
-        await _screenService.UpdateAsync(screen);
-        return Ok();
+        var updated = await _screenService.UpdateAsync(id, dto);
+        if (!updated)
+            return NotFound();
+
+        return NoContent();
+    }
+
+    // DELETE /api/screens/{id}
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await _screenService.DeleteAsync(id);
+        if (!deleted)
+            return NotFound();
+
+        return NoContent();
     }
 }

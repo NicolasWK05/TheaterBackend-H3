@@ -1,13 +1,9 @@
 namespace TheaterBackend.Domain.Models;
 
-public class Seat
+public class PremiumSeatRow
 {
     public int Id { get; set; }
-
     public int RowNumber { get; set; }
-    public int ColumnNumber { get; set; }
-    public bool IsPremium { get; set; }
-    public bool IsAvailable { get; set; }
 
     // FK
     public int ScreenId { get; set; }

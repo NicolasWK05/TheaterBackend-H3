@@ -4,5 +4,10 @@ namespace TheaterBackend.Domain.Models;
 public class Showcase
 {
     public int Id { get; set; }
-    public Film Film { get; set; }
+
+    // FK
+    public int FilmId { get; set; }
+
+    // Navigation
+    public Film Film { get; set; } = null!;
 }

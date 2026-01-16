@@ -12,4 +12,5 @@ public interface IPersonService : IGenericService<Person>
     Task CreateAsync(PersonCreateDTO person);
     Task UpdateAsync(PersonUpdateDTO person);
     Task ChangePasswordAsync(PersonChangePasswordDTO person);
+    Task<PersonDTO> GetByEmailAsync(string email);
 }
