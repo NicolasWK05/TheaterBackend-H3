@@ -27,7 +27,7 @@ builder.Services.AddScoped<IShowcaseRepo, ShowcaseRepo>();
 builder.Services.AddScoped<ITheaterRepo, TheaterRepo>();
 builder.Services.AddScoped<ITicketRepo, TicketRepo>();
 
-builder.Services.AddScoped<PersonService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<FilmService>();
 builder.Services.AddScoped<ScreeningService>();
 builder.Services.AddScoped<ScreenService>();

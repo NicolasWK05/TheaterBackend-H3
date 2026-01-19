@@ -62,9 +62,12 @@ public class PersonService(IPersonRepo repo) : GenericService<Person>(repo), IPe
         await repo.UpdateAsync(personEntity);
     }
 
-    public async Task<PersonDTO> GetByEmailAsync(string email)
+    public async Task<PersonDTO?> GetByEmailAsync(string email)
     {
-        var personEntity = await repo.GetByEmailAsync(email) ?? throw new Exception("Person not found");
+        var personEntity = await repo.GetByEmailAsync(email);
+        if (personEntity == null)
+            return null;
+
         var personDTO = new PersonDTO
         {
             Id = personEntity.Id,

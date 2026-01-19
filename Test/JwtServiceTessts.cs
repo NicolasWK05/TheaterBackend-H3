@@ -8,7 +8,7 @@ public class JwtServiceTests
     {
         var service = new JwtTokenService("01234567890123456789012345678901", "iss", "aud");
 
-        var token = service.GenerateToken("test@test.com", "User");
+        var token = service.GenerateToken("test@test.com", "User", 1);
 
         Assert.False(string.IsNullOrWhiteSpace(token));
     }

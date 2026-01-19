@@ -40,7 +40,7 @@ public class AuthController : ControllerBase
 
         await _personService.CreateAsync(person);
 
-        var token = _jwtService.GenerateToken(person.Email, "User");
+        var token = _jwtService.GenerateToken(person.Email, "User", person.Id);
 
         return Ok(new AuthResponseDto
         {
@@ -57,7 +57,7 @@ public class AuthController : ControllerBase
         if (person == null || !_passwordHasher.Verify(dto.Password, person.PasswordHash))
             return Unauthorized("Invalid credentials");
 
-        var token = _jwtService.GenerateToken(person.Email, "User");
+        var token = _jwtService.GenerateToken(person.Email, "User", person.Id);
 
         return Ok(new AuthResponseDto
         {

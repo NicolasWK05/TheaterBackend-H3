@@ -19,10 +19,11 @@ public class JwtTokenService : IJwtTokenService
         _audience = audience;
     }
 
-    public string GenerateToken(string email, string role)
+    public string GenerateToken(string email, string role, int id)
     {
         var claims = new[]
         {
+            new Claim(ClaimTypes.NameIdentifier, id.ToString()),
             new Claim(ClaimTypes.Email, email),
             new Claim(ClaimTypes.Role, role)
         };
@@ -82,7 +83,8 @@ public class JwtTokenService : IJwtTokenService
         var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
         var email = jwt.Claims.First(c => c.Type == ClaimTypes.Email).Value;
         var role = jwt.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+        var id = int.Parse(jwt.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-        return GenerateToken(email, role);
+        return GenerateToken(email, role, id);
     }
 }
